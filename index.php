@@ -127,7 +127,7 @@ include __DIR__ . '/includes/head.php';
     </form>
     <div class="row mt-5">
         <?php foreach ($books_search as $book): ?>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="col-12 col-sm-6 col-md-4 mb-4">
                 <div class="card">
                 <div style="height: 400px;">
                     <img src="<?= $book['immagine'] ?>" class="card-img-top" alt="Immagine di copertina" style="height: 100%; object-fit: contain;">
