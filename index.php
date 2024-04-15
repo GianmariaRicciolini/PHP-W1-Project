@@ -63,39 +63,36 @@ include __DIR__ . '/includes/head.php';
         <div class="col-6">
         <?php
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $name = $_POST['titolo'];
+                // Esegui la validazione dei dati
+                $titolo = $_POST['titolo'];
                 $autore = $_POST['autore'];
-                $anno_pubblicazione = $_POST['anno_pubblicazione'];
+                $pubblicazione = $_POST['anno_pubblicazione'];
                 $genere = $_POST['genere'];
                 $immagine = $_POST['immagine'];
-
-                if (empty($name)) {
-                   $errors['titolo'] = 'Inserisci un titolo';
+            
+                // Validazione dei dati
+                if (empty($titolo)) {
+                    $errors['titolo'] = 'Inserisci un titolo';
                 }
-
+            
                 if (empty($autore)) {
-                   $errors['autore'] = 'Inserisci un autore';
+                    $errors['autore'] = 'Inserisci un autore';
                 }
-    
-                if (empty($anno_pubblicazione)) {
-                   $errors['anno_pubblicazione'] = 'Inserisci un anno di pubblicazione';
+                
+                if (empty($pubblicazione)) {
+                    $errors['anno_pubblicazione'] = 'Inserisci un anno di pubblicazione';
                 }
-
+            
                 if (empty($genere)) {
-                   $errors['genere'] = 'Inserisci un genere';
+                    $errors['genere'] = 'Inserisci un genere';
                 }
-
+            
                 if (empty($immagine)) {
                     $errors['immagine'] = 'Inserisci una immagine';
                 }
-
-                if (!filter_var($immagine, FILTER_VALIDATE_URL)) {
-                    $errors['immagine'] = 'L\'URL immagine non è valido';
-                }
-
+            
                 if (!empty($errors)) {
                     echo '<div class="container mt-4 pt-5">';
-                    echo '<h2 class="text-danger text-center">Ops! Inserisci i dati corretti!</h2>';
                     echo '<div class="alert alert-danger" role="alert">';
                     echo '<h4 class="alert-heading">Ci sono errori nel modulo:</h4>';
                     echo '<ul>';
@@ -105,13 +102,11 @@ include __DIR__ . '/includes/head.php';
                     echo '</ul>';
                     echo '</div>';
                     echo '</div>';
-                }  else {
-
+                } 
+                else {
                     $stmt = $pdo->prepare("INSERT INTO libri (titolo, autore, anno_pubblicazione, genere, immagine) VALUES (?, ?, ?, ?, ?)");
-    
-
-                    $stmt->execute([$name, $autore, $anno_pubblicazione, $genere, $immagine]);
-
+                    $stmt->execute([$titolo, $autore, $pubblicazione, $genere, $immagine]);
+            
                     header('Location: index.php');
                     exit;
                 }

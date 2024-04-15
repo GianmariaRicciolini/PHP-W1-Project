@@ -7,47 +7,47 @@ $id = $_GET['id'];
 $errors = [];
 // Verifica se il modulo è stato inviato
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Esegui la validazione dei dati
-    $titolo = $_POST['titolo'];
-    $autore = $_POST['autore'];
-    $pubblicazione = $_POST['anno_pubblicazione'];
-    $genere = $_POST['genere'];
-    $immagine = $_POST['immagine'];
-
-    // Validazione dei dati
-    if (empty($titolo)) {
-        $errors['titolo'] = 'Inserisci un titolo';
-    }
-
-    if (empty($autore)) {
-        $errors['autore'] = 'Inserisci un autore';
-    }
-    
-    if (empty($pubblicazione)) {
-        $errors['anno_pubblicazione'] = 'Inserisci un anno di pubblicazione';
-    }
-
-    if (empty($genere)) {
-        $errors['genere'] = 'Inserisci un genere';
-    }
-
-    if (empty($immagine)) {
-        $errors['immagine'] = 'Inserisci una immagine';
-    }
-
-    // Se ci sono errori, visualizza il form con gli errori
-    if (!empty($errors)) {
-        echo '<div class="container mt-4 pt-5">';
-        echo '<div class="alert alert-danger" role="alert">';
-        echo '<h4 class="alert-heading">Ci sono errori nel modulo:</h4>';
-        echo '<ul>';
-        foreach ($errors as $error) {
-            echo '<li>' . $error . '</li>';
-        }
-        echo '</ul>';
-        echo '</div>';
-        echo '</div>';
-    } else {
+     // Esegui la validazione dei dati
+     $titolo = $_POST['titolo'];
+     $autore = $_POST['autore'];
+     $pubblicazione = $_POST['anno_pubblicazione'];
+     $genere = $_POST['genere'];
+     $immagine = $_POST['immagine'];
+ 
+     // Validazione dei dati
+     if (empty($titolo)) {
+         $errors['titolo'] = 'Inserisci un titolo';
+     }
+ 
+     if (empty($autore)) {
+         $errors['autore'] = 'Inserisci un autore';
+     }
+     
+     if (empty($pubblicazione)) {
+         $errors['anno_pubblicazione'] = 'Inserisci un anno di pubblicazione';
+     }
+ 
+     if (empty($genere)) {
+         $errors['genere'] = 'Inserisci un genere';
+     }
+ 
+     if (empty($immagine)) {
+         $errors['immagine'] = 'Inserisci una immagine';
+     }
+ 
+     if (!empty($errors)) {
+         echo '<div class="container mt-4 pt-5">';
+         echo '<div class="alert alert-danger" role="alert">';
+         echo '<h4 class="alert-heading">Ci sono errori nel modulo:</h4>';
+         echo '<ul>';
+         foreach ($errors as $error) {
+             echo '<li>' . $error . '</li>';
+         }
+         echo '</ul>';
+         echo '</div>';
+         echo '</div>';
+     } 
+     else {
         // Se non ci sono errori, esegui l'aggiornamento dei dati del libro nel database
         $stmt = $pdo->prepare('UPDATE libri SET titolo = :titolo, autore = :autore, anno_pubblicazione = :anno_pubblicazione, genere = :genere, immagine = :immagine  WHERE id = :id');
         $stmt->execute([
