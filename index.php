@@ -56,7 +56,7 @@ include __DIR__ . '/includes/head.php';
                 </div>
         
                 <div class="text-end mt-4">
-                    <button type="submit" class="btn btn-primary w-25 mt-4">Invia</button>
+                    <button type="submit" class="btn btn-success w-25 mt-4">Add Book</button>
                 </div>
             </form>
         </div>
@@ -93,7 +93,7 @@ include __DIR__ . '/includes/head.php';
             
                 if (!empty($errors)) {
                     echo '<div class="container mt-4 pt-5">';
-                    echo '<div class="alert alert-danger" role="alert">';
+                    echo '<div class="alert alert-danger mt-5" role="alert">';
                     echo '<h4 class="alert-heading">Ci sono errori nel modulo:</h4>';
                     echo '<ul>';
                     foreach ($errors as $error) {
@@ -117,7 +117,7 @@ include __DIR__ . '/includes/head.php';
 <form action="" method="GET" class="mb-3">
         <div class="input-group w-50">
             <input type="text" class="form-control w-25" placeholder="Cerca per titolo, autore o genere" name="search" value="<?= $search ?>">
-            <button type="submit" class="btn btn-warning">Cerca</button>
+            <button type="submit" class="btn btn-warning">Search</button>
         </div>
     </form>
     <div class="row mt-5">
