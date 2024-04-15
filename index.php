@@ -1,12 +1,16 @@
 <?php
 include __DIR__ . '/includes/dbconnect.php';
-// Query per selezionare tutti i record dalla tabella listautenti
-$stmt = $pdo->prepare('SELECT * FROM libri');
-$stmt->execute();
-// Estrai i risultati come array associativo
-$books = $stmt->fetchAll();
 $errors = [];
 
+$stmt = $pdo->prepare('SELECT * FROM libri');
+$stmt->execute();
+$books = $stmt->fetchAll();
+
+$search = isset($_GET['search']) ? $_GET['search'] : ''; 
+
+$stmt_search = $pdo->prepare('SELECT * FROM libri WHERE titolo LIKE ? OR autore LIKE ? OR genere LIKE ?');
+$stmt_search->execute(["%$search%", "%$search%", "%$search%"]);
+$books_search = $stmt_search->fetchAll();
 
 include __DIR__ . '/includes/head.php';
 ?>
@@ -115,9 +119,15 @@ include __DIR__ . '/includes/head.php';
         ?>
 </div>
 <div class="container mt-4 pt-5">
-    <div class="row">
-        <?php foreach ($books as $book): ?>
-            <div class="col-4 mb-4">
+<form action="" method="GET" class="mb-3">
+        <div class="input-group w-50">
+            <input type="text" class="form-control w-25" placeholder="Cerca per titolo, autore o genere" name="search" value="<?= $search ?>">
+            <button type="submit" class="btn btn-warning">Cerca</button>
+        </div>
+    </form>
+    <div class="row mt-5">
+        <?php foreach ($books_search as $book): ?>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                 <div class="card">
                 <div style="height: 400px;">
                     <img src="<?= $book['immagine'] ?>" class="card-img-top" alt="Immagine di copertina" style="height: 100%; object-fit: contain;">
