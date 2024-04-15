@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $autore = $_POST['autore'];
     $pubblicazione = $_POST['anno_pubblicazione'];
     $genere = $_POST['genere'];
+    $immagine = $_POST['immagine'];
 
     // Validazione dei dati
     if (empty($titolo)) {
@@ -30,6 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors['genere'] = 'Inserisci un genere';
     }
 
+    if (empty($immagine)) {
+        $errors['immagine'] = 'Inserisci una immagine';
+    }
+
     // Se ci sono errori, visualizza il form con gli errori
     if (!empty($errors)) {
         echo '<div class="container mt-4 pt-5">';
@@ -44,13 +49,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo '</div>';
     } else {
         // Se non ci sono errori, esegui l'aggiornamento dei dati del libro nel database
-        $stmt = $pdo->prepare('UPDATE libri SET titolo = :titolo, autore = :autore, anno_pubblicazione = :anno_pubblicazione, genere = :genere  WHERE id = :id');
+        $stmt = $pdo->prepare('UPDATE libri SET titolo = :titolo, autore = :autore, anno_pubblicazione = :anno_pubblicazione, genere = :genere, immagine = :immagine  WHERE id = :id');
         $stmt->execute([
             'id' => $id,
             'titolo' => $titolo,
             'autore' => $autore,
             'anno_pubblicazione' => $pubblicazione,
-            'genere' => $genere
+            'genere' => $genere,
+            'immagine' => $immagine
         ]);
 
         // Reindirizza il libro al backoffice dopo l'aggiornamento
@@ -62,10 +68,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Esegui la query per ottenere i dati del libro con l'ID specificato
 $stmt = $pdo->prepare('SELECT * FROM libri WHERE id = :id');
 $stmt->execute(['id' => $id]);
-$user = $stmt->fetch();
+$book = $stmt->fetch();
 
 // Verifica se il libro è stato trovato
-if (!$user) {
+if (!$book) {
     echo "Libro non trovato";
     exit;
 }
@@ -77,24 +83,28 @@ include __DIR__ . '/includes/head.php';
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h2 class="mb-4">Modify User</h2>
+            <h2 class="mb-4">Modify book</h2>
             <form action="" method="post">
     <input type="hidden" name="id" value="<?= $id ?>">
     <div class="mb-3">
     <label for="titolo" class="form-label">Titolo</label>
-    <input type="text" class="form-control" id="titolo" name="titolo" value="<?= $user['titolo'] ?>" required>
+    <input type="text" class="form-control" id="titolo" name="titolo" value="<?= $book['titolo'] ?>" required>
 </div>
 <div class="mb-3">
     <label for="autore" class="form-label">Autore</label>
-    <input type="autore" class="form-control" id="autore" name="autore" value="<?= $user['autore'] ?>" required>
+    <input type="autore" class="form-control" id="autore" name="autore" value="<?= $book['autore'] ?>" required>
 </div>
 <div class="mb-3">
     <label for="anno_pubblicazione" class="form-label">Anno di pubblicazione</label>
-    <input class="mt-2 w-100" type="date" name="anno_pubblicazione" id="anno_pubblicazione" value="<?= $user['anno_pubblicazione'] ?>" required>
+    <input class="mt-2 w-100" type="date" name="anno_pubblicazione" id="anno_pubblicazione" value="<?= $book['anno_pubblicazione'] ?>" required>
 </div>
 <div class="mb-3">
     <label for="genere" class="form-label">Genere</label>
-    <input type="genere" class="form-control" id="genere" name="genere" value="<?= $user['genere'] ?>" required>
+    <input type="genere" class="form-control" id="genere" name="genere" value="<?= $book['genere'] ?>" required>
+</div>
+<div class="mb-3">
+    <label class="form-label" for="immagine">URL Immagine</label>
+    <input type="text" name="immagine" id="immagine" placeholder="Inserisci l'URL immagine" class="form-control" value="<?= $book['immagine'] ?>" required>
 </div>
     <button type="submit" class="btn btn-primary">Update</button>
 </form>

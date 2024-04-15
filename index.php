@@ -13,97 +13,124 @@ include __DIR__ . '/includes/head.php';
 <div class="container mt-4">
     <div class="row">
         <div class="col-6">
-        <form action="" method="post" class="pt-5 d-flex flex-column" novalidate>
+            <h1 class="text-center pt-5">Inserisci qui il tuo Libro</h1>
+        <form action="" method="post" class="pt-2 d-flex flex-column" novalidate>
+
                 <div class="row mb-3">
                     <label class="col-4 pt-3" for="titolo">Titolo</label>
                     <div class="col-8">
-                        <input class="mt-2 w-100" type="text" name="titolo" id="titolo" placeholder="titolo">
+                        <input class="form-control mt-2 w-100" type="text" name="titolo" id="titolo" placeholder="Inserisci il titolo">
                     </div>
                 </div>
         
                 <div class="row mb-3">
-                    <label class="col-4 pt-3" for="autore">autore</label>
+                    <label class="col-4 pt-3" for="autore">Autore</label>
                     <div class="col-8">
-                        <input class="mt-2 w-100" type="text" name="autore" id="autore" placeholder="autore">
+                        <input class="form-control mt-2 w-100" type="text" name="autore" id="autore" placeholder="Inserisci l'autore">
                     </div>
                 </div>
         
                 <div class="row mb-3">
-                    <label class="col-4 pt-3" for="anno_pubblicazione">Pubblicazione</label>
+                    <label class="col-4 pt-3" for="anno_pubblicazione">Data pubblicazione</label>
                     <div class="col-8">
-                        <input class="mt-2 w-100" type="date" name="anno_pubblicazione" id="anno_pubblicazione">
+                        <input class="form-control mt-2 w-100" type="date" name="anno_pubblicazione" id="anno_pubblicazione">
                     </div>
                 </div>
+
                 <div class="row mb-3">
-                    <label class="col-4 pt-3" for="genere">genere</label>
+                    <label class="col-4 pt-3" for="genere">Genere</label>
                     <div class="col-8">
-                        <input type="text" name="genere" id="genere" placeholder="genere" class="form-control mt-2 w-100">
+                        <input type="text" name="genere" id="genere" placeholder="Inserisci il genere" class="form-control mt-2 w-100">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-4 pt-3" for="immagine">URL Immagine</label>
+                    <div class="col-8">
+                        <input type="url" name="immagine" id="immagine" placeholder="Inserisci l'URL immagine" class="form-control mt-2 w-100">
                     </div>
                 </div>
         
-                <button type="submit" class="btn btn-primary w-25 mt-4">Invia</button>
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-primary w-25 mt-4">Invia</button>
+                </div>
             </form>
         </div>
         <div class="col-6">
         <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = $_POST['titolo'];
-    $autore = $_POST['autore'];
-    $anno_pubblicazione = $_POST['anno_pubblicazione'];
-    $genere = $_POST['genere'];
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $name = $_POST['titolo'];
+                $autore = $_POST['autore'];
+                $anno_pubblicazione = $_POST['anno_pubblicazione'];
+                $genere = $_POST['genere'];
+                $immagine = $_POST['immagine'];
 
-    if (empty($name)) {
-        $errors['titolo'] = 'Inserisci un titolo';
-    }
+                if (empty($name)) {
+                   $errors['titolo'] = 'Inserisci un titolo';
+                }
 
-    if (empty($autore)) {
-        $errors['autore'] = 'Inserisci un autore';
-    }
+                if (empty($autore)) {
+                   $errors['autore'] = 'Inserisci un autore';
+                }
     
-    if (empty($anno_pubblicazione)) {
-        $errors['anno_pubblicazione'] = 'Inserisci un anno di pubblicazione';
-    }
+                if (empty($anno_pubblicazione)) {
+                   $errors['anno_pubblicazione'] = 'Inserisci un anno di pubblicazione';
+                }
 
-    if (empty($genere)) {
-        $errors['genere'] = 'Inserisci un genere';
-    }
+                if (empty($genere)) {
+                   $errors['genere'] = 'Inserisci un genere';
+                }
 
-    if (!empty($errors)) {
-        echo '<div class="container mt-4 pt-5">';
-        echo '<div class="alert alert-danger" role="alert">';
-        echo '<h4 class="alert-heading">Ci sono errori nel modulo:</h4>';
-        echo '<ul>';
-        foreach ($errors as $error) {
-            echo '<li>' . $error . '</li>';
-        }
-        echo '</ul>';
-        echo '</div>';
-        echo '</div>';
-    }  else {
+                if (empty($immagine)) {
+                    $errors['immagine'] = 'Inserisci una immagine';
+                }
 
-        $stmt = $pdo->prepare("INSERT INTO libri (titolo, autore, anno_pubblicazione, genere) VALUES (?, ?, ?, ?)");
+                if (!filter_var($immagine, FILTER_VALIDATE_URL)) {
+                    $errors['immagine'] = 'L\'URL immagine non è valido';
+                }
+
+                if (!empty($errors)) {
+                    echo '<div class="container mt-4 pt-5">';
+                    echo '<h2 class="text-danger text-center">Ops! Inserisci i dati corretti!</h2>';
+                    echo '<div class="alert alert-danger" role="alert">';
+                    echo '<h4 class="alert-heading">Ci sono errori nel modulo:</h4>';
+                    echo '<ul>';
+                    foreach ($errors as $error) {
+                        echo '<li>' . $error . '</li>';
+                    }
+                    echo '</ul>';
+                    echo '</div>';
+                    echo '</div>';
+                }  else {
+
+                    $stmt = $pdo->prepare("INSERT INTO libri (titolo, autore, anno_pubblicazione, genere, immagine) VALUES (?, ?, ?, ?, ?)");
     
 
-        $stmt->execute([$name, $autore, $anno_pubblicazione, $genere]);
+                    $stmt->execute([$name, $autore, $anno_pubblicazione, $genere, $immagine]);
 
-        header('Location: index.php');
-        exit;
-    }
-}
-?>
+                    header('Location: index.php');
+                    exit;
+                }
+            }
+        ?>
 </div>
 <div class="container mt-4 pt-5">
     <div class="row">
         <?php foreach ($books as $book): ?>
             <div class="col-4 mb-4">
                 <div class="card">
+                <div style="height: 400px;">
+                    <img src="<?= $book['immagine'] ?>" class="card-img-top" alt="Immagine di copertina" style="height: 100%; object-fit: contain;">
+                </div>
                     <div class="card-body">
                         <h5 class="card-title">Titolo: <?= $book['titolo'] ?></h5>
                         <p class="card-text">Autore: <?= $book['autore'] ?></p>
                         <p class="card-text">Pubblicazione: <?= $book['anno_pubblicazione'] ?></p>
                         <p class="card-text">Genere: <?= $book['genere'] ?></p>
-                        <a class="btn btn-danger" href="./delete.php?id=<?= $book['id'] ?>">Delete</a>
-                        <a class="btn btn-primary" href="./modify.php?id=<?= $book['id'] ?>">Modify</a>
+                        <div class="text-end">
+                            <a class="btn btn-danger" href="./delete.php?id=<?= $book['id'] ?>">Delete</a>
+                            <a class="btn btn-primary" href="./modify.php?id=<?= $book['id'] ?>">Modify</a>
+                        </div>
                     </div>
                 </div>
             </div>
