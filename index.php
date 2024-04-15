@@ -1,37 +1,15 @@
 <?php
-$host = 'localhost';
-$db   = 'gestione_libreria';
-$user = 'root';
-$pass = '';
-
-$dsn = "mysql:host=$host;dbname=$db";
-
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-
-$pdo = new PDO($dsn, $user, $pass, $options);
-
+include __DIR__ . '/includes/dbconnect.php';
 // Query per selezionare tutti i record dalla tabella listautenti
 $stmt = $pdo->prepare('SELECT * FROM libri');
 $stmt->execute();
 // Estrai i risultati come array associativo
 $books = $stmt->fetchAll();
 $errors = [];
+
+
+include __DIR__ . '/includes/head.php';
 ?>
-
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HomePage</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
-<body>
-
 <div class="container mt-4">
     <div class="row">
         <div class="col-6">
